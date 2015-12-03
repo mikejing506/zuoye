@@ -9,7 +9,7 @@ var {
   StyleSheet,
   TextInput,
   TabBarIOS,
-  ListView,
+  ScrollView,
   TouchableHighlight,
   Text,
   View,
@@ -19,10 +19,9 @@ var {
 
 var heidong = React.createClass({
     getInitialState: function() {
-        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         return {
-            dataSource: ds.cloneWithRows(['为您推荐', '国际大牌', '天猫国际', '女装', '女鞋', '男装', '男鞋', '内衣']),
-            active: false,
+            dataSource: [{key:1,title:'为你推荐'},{key:2,title:'国际大牌'}, {key:3,title:'天猫国际'}, {key:4,title:'女装'}, {key:5,title:'女鞋'}, {key:6,title:'男装'}, {key:7,title:'男鞋'}, {key:8,title:'内衣'},{key:9,title:'母婴'},{key:10,title:'数码'},{key:11,title:'家电'},{key:12,title:'美妆'},{key:13,title:'爆炸'}],
+            active_data: 1,
         };
     },
     render: function() {
@@ -46,23 +45,23 @@ var heidong = React.createClass({
                     </View>
                     <Image style={styles.menubutton} source={require('./img/menu.png')} />
                 </View>
-                <ListView
-                    style={styles.sort}
-                    dataSource={this.state.dataSource}
-                    renderRow={this._leftlist} />
+                <ScrollView
+                  style={styles.sort}>
+                  {this.state.dataSource.map(this._leftlist)}
+                </ScrollView>
             </View>
         );
     },
-    _leftlist: function(rowData: string, sectionID: number, rowID: number){
+    _leftlist: function(rowData: object){
         return (
-            <TouchableHighlight onPress={this._onPressButton}  style={[styles.sort_item, this.state.active && styles.sort_item_active]}>
-                <Text style={styles.leftlist_text}>{rowData}</Text>
+            <TouchableHighlight onPress={() => this._onPressButton(rowData.key)}  style={[styles.sort_item, this.state.active_data == rowData.key && styles.sort_item_active]}>
+                <Text style={[styles.leftlist_text, this.state.active_data == rowData.key && styles.leftlist_text_active]}>{rowData.title}</Text>
             </TouchableHighlight>
         );
     },
-    _onPressButton: function(){
+    _onPressButton: function(data: number){
         this.setState({
-            active: true,
+            active_data : data,
         });
     },
 });
@@ -124,8 +123,8 @@ var styles = StyleSheet.create({
     },
     sort:{
         width:90,
-        top:20,
-        backgroundColor:'#FFF',
+        top:22,
+        flex:1,
         flexDirection: 'row',
     },
     sort_item:{
@@ -133,16 +132,28 @@ var styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: '#ECEBEC',
-        borderTopWidth: 2,
+        marginBottom:2,
+        flex:1,
+        backgroundColor:'#FFF'
     },
     sort_item_active:{
-        borderColor: '#FFF',
-        borderWidth: 10,
+        backgroundColor:'#ECEBEC',
+        borderLeftWidth: 7,
+        flex:1,
+        borderLeftColor:'#b00'
     },
     leftlist_text:{
         margin:0,
         color:'#666',
+    },
+    leftlist_text_active:{
+        margin:0,
+        color:'#b00',
+    },
+    textdata:{
+        top:40,
+        left: 150,
+        color:'#999'
     },
 });
 
