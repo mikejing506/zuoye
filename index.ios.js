@@ -20,15 +20,9 @@ var {
 
 var heidong = React.createClass({
     getInitialState: function() {
-      return {
-            dataSource: [{key:1,title:'为你推荐'},{key:2,title:'国际大牌'}, {key:3,title:'天猫国际'}, {key:4,title:'女装'}, {key:5,title:'女鞋'}, {key:6,title:'男装'}, {key:7,title:'男鞋'}, {key:8,title:'内衣'},{key:9,title:'母婴'},{key:10,title:'数码'},{key:11,title:'家电'},{key:12,title:'美妆'},{key:13,title:'爆炸'}],
-            active_data: 1,
-        };
-    },
-    render: function() {
       var dataList = {1:'为你推荐',2:'国际大牌',3:'天猫国际',4:'女装'}
-      var dataBlob = {1:[{rid:0,url:'',title:'电脑硬件'},{rid:1,url:'',title:'手机配件'},{rid:2,url:'',title:'休闲裤'},{rid:3,url:'',title:'笔记本'},{rid:4,url:'',title:'DIY电脑'},{rid:5,url:'',title:'卫衣'}]}
-      var dataSource = new ListView.DataSource({
+        var dataBlob = {1:[{rid:0,url:'',title:'电脑硬件'},{rid:1,url:'',title:'手机配件'},{rid:2,url:'',title:'休闲裤'},{rid:3,url:'',title:'笔记本'},{rid:4,url:'',title:'DIY电脑'},{rid:5,url:'',title:'卫衣'}]}
+        var dataSource = new ListView.DataSource({
         getRowData: (dataBlob,sectionID,rowID)=>{
           return dataBlob[sectionID];
         },
@@ -37,13 +31,20 @@ var heidong = React.createClass({
         },
         rowHasChanged: (row1, row2) => row1 !== row2,
         sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-      });
-      let sectionIDs = [];
-      let rowIDs = [];
-      for (var i = dataList.length - 1; i >= 0; i--) {
-        sectionIDs.push(dataList[i]);
-        rowIDs.push(i);
-      };
+        });
+          let sectionIDs = [];
+          let rowIDs = [];
+        for (var i = dataList.length - 1; i >= 0; i--) {
+          sectionIDs.push(dataList[i]);
+          rowIDs.push(dataBlob[i]);
+        };
+      return {
+            dataSource0: dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
+            dataSource: [{key:1,title:'为你推荐'},{key:2,title:'国际大牌'}, {key:3,title:'天猫国际'}, {key:4,title:'女装'}, {key:5,title:'女鞋'}, {key:6,title:'男装'}, {key:7,title:'男鞋'}, {key:8,title:'内衣'},{key:9,title:'母婴'},{key:10,title:'数码'},{key:11,title:'家电'},{key:12,title:'美妆'},{key:13,title:'爆炸'}],
+            active_data: 1,
+        };
+    },
+    render: function() {
         return (
             <View style={styles.mainbox}>
             <View style={styles.StatusBar}></View>
@@ -71,7 +72,7 @@ var heidong = React.createClass({
                 </ScrollView>
                 <ListView
                   style={styles.naiyou}
-                  dataSource={dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs)}
+                  dataSource={this.state.dataSource0}
                   renderRow={this._naiyou.bind(this)}
                   renderSectionHeader={this._header.bind(this)} />
                 </View>
